@@ -9,10 +9,11 @@ namespace Libreria_Lecturas.Implementaciones
     public class ConfiguracionUsuariosNegocio : IConfiguracionUsuariosNegocio
     {
         private readonly Conexion _context;
-
-        public ConfiguracionUsuariosNegocio(Conexion context)
+        private readonly IAuditoriasNegocio _auditorias;
+        public ConfiguracionUsuariosNegocio(Conexion context, IAuditoriasNegocio auditorias)
         {
             _context = context;
+            _auditorias = auditorias;
         }
 
         public List<ConfiguracionUsuarios> Consultar()
@@ -22,6 +23,9 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Add(entidad);
             _context.SaveChanges();
+            _auditorias.Registrar("CalendarioLecturas", "Crear",
+               "Sistema",
+               $"CalendarioLecturas creado: {entidad.Id}");
             return entidad;
         }
 
@@ -29,6 +33,8 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Update(entidad);
             _context.SaveChanges();
+            _auditorias.Registrar("CalendarioLecturas", "Editar",
+               "Sistema",$"CalendarioLecturas editado: {entidad.Id}");
             return entidad;
         }
 
@@ -36,6 +42,9 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Remove(entidad);
             _context.SaveChanges();
+            _auditorias.Registrar("CalendarioLecturas", "Eliminar",
+               entidad._UsuarioId?.Email ?? "Sistema",
+               $"Calendario eliminado. Id: {entidad.Id}");
             return true;
         }
     }
