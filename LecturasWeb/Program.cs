@@ -54,6 +54,7 @@ builder.Services.AddScoped<IRecomendacionesNegocio, RecomendacionesNegocio>();
 builder.Services.AddScoped<IResenasNegocio, ResenasNegocio>();
 builder.Services.AddScoped<ISeccionLecturasNegocio, SeccionLecturasNegocio>();
 builder.Services.AddScoped<IUsuariosNegocio, UsuariosNegocio>();
+builder.Services.AddScoped<IAuditoriasNegocio, AuditoriasNegocio>();
 QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
