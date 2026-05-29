@@ -41,7 +41,7 @@ namespace Libreria_Lecturas.Implementaciones
         public DbSet<Resenas> Resenas { get; set; }
         public DbSet<SeccionLecturas> SeccionLecturas { get; set; }
         public DbSet<Usuarios> Usuarios { get; set; }
-
+        public DbSet<Auditorias> Auditorias { get; set; } // Nueva tabla para auditorías
         // Implementación explícita de los métodos de la interfaz
         public override int SaveChanges()
         {

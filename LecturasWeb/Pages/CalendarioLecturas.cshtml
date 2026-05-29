@@ -143,6 +143,7 @@
         <div class="topbar-actions">
             <a asp-page="/Favoritos" class="topbar-icon"><i class="bi bi-heart"></i></a>
             <a asp-page="/Notificaciones" class="topbar-icon"><i class="bi bi-bell"></i></a>
+            <a asp-page="/CaledarioLecturas" class="topbar-icon"><i class="bi bi-bell"></i></a> @*Cuando un usuario no este registrado pida registrar para poder crear un calendario*@           
             @if (User.Identity!.IsAuthenticated)
             {
                 <a asp-page="/Account/Logout" class="topbar-icon" title="Cerrar sesión"><i class="bi bi-person-check-fill"></i></a>
