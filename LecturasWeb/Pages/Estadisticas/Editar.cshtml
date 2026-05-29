@@ -1,0 +1,39 @@
+﻿@page
+@model LecturasWeb.Pages.Estadisticas.EditarModel
+@{
+    <div class="form-card">
+        <div class="form-title"><i class="bi bi-bar-chart me-2"></i>Editar Estadística</div>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Estadisticas.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Libros Leídos</label>
+                <input asp-for="Estadisticas.LibrosLeidos" type="number" class="form-control" />
+                <span asp-validation-for="Estadisticas.LibrosLeidos" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Páginas Totales</label>
+                <input asp-for="Estadisticas.PaginasTotales" type="number" class="form-control" />
+                <span asp-validation-for="Estadisticas.PaginasTotales" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Promedio de Páginas</label>
+                <input asp-for="Estadisticas.PromedioPaginas" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="Estadisticas.PromedioPaginas" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-guardar">
+                    <i class="bi bi-check-lg me-1"></i> Guardar
+                </button>
+                <a asp-page="/Estadisticas" class="btn btn-outline-secondary btn-cancelar">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+}

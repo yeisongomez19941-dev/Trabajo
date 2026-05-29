@@ -1,0 +1,44 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Libros.EditarModel
+
+<h2>Editar Libro</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Libro.Id" />
+    <div class="mb-3">
+        <label>Título</label>
+        <input asp-for="Libro.Titulo" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Autor</label>
+        <input asp-for="Libro.Autor" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Páginas Totales</label>
+        <input asp-for="Libro.PaginasTotales" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Año Publicación</label>
+        <input asp-for="Libro.AnoPublicacion" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Sinopsis</label>
+        <textarea asp-for="Libro.Sinopsis" class="form-control" rows="10"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>Género</label>
+        <select asp-for="Libro.GeneroId" class="form-control">
+            <option value="">-- Selecciona un género --</option>
+            @foreach (var genero in Model.ListaGeneros)
+            {
+                <option value="@genero.Id">@genero.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>URL de portada</label>
+        <input asp-for="Libro.ImagenUrl" class="form-control" placeholder="https://..." />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Libros" class="btn btn-secondary">Cancelar</a>
+</form>

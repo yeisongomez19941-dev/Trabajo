@@ -1,0 +1,33 @@
+﻿@page
+@model LecturasWeb.Pages.AutoresModel
+
+<a asp-page="/Autores/Crear" class="btn btn-primary mb-3">Nuevo Autor</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Nacionalidad</th>
+            <th>Fecha Nacimiento</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var autor in Model.ListaAutores)
+        {
+            <tr>
+                <td>@autor.Id</td>
+                <td>@autor.Nombre</td>
+                <td>@autor.Nacionalidad</td>
+                <td>@autor.FechaNacimiento.ToShortDateString()</td>
+                <td>@(autor.Activo == true ? "Sí" : "No")</td>
+                <td>
+                    <a asp-page="/Autores/Editar" asp-route-id="@autor.Id" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-page="/Autores/Eliminar" asp-route-id="@autor.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

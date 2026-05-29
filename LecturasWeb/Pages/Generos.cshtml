@@ -1,0 +1,32 @@
+﻿@page
+@model LecturasWeb.Pages.GenerosModel
+  @if (User.IsInRole("Admin"))
+     {
+        <a asp-page="/Generos/Crear" class="btn btn-primary mb-3">Nuevo Genero</a>
+     }
+<table class="table">
+    <thead>
+        <tr>
+        
+            <th>Nombre</th>
+      
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var generos in Model.ListaGeneros)
+        {
+            <tr>
+                
+                <td>@generos.Nombre</td>
+ 
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-page="/Generos/Editar" asp-route-id="@generos.Id" class="btn btn-warning btn-sm">Editar</a>
+                        <a asp-page="/Generos/Eliminar" asp-route-id="@generos.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

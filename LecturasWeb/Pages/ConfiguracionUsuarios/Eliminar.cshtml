@@ -1,0 +1,13 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.ConfiguracionUsuarios.EliminarModel
+
+<h2>¿Eliminar esta configuración?</h2>
+
+<p><strong>Notificaciones:</strong> @(Model.Configuracion.NotificacionesActivas == true ? "Activas" : "Inactivas")</p>
+<p><strong>Tema Oscuro:</strong> @(Model.Configuracion.TemaOscuro == true ? "Sí" : "No")</p>
+
+<form method="post">
+    <input type="hidden" asp-for="Configuracion.Id" />
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a asp-page="/ConfiguracionUsuarios" class="btn btn-secondary">Cancelar</a>
+</form>

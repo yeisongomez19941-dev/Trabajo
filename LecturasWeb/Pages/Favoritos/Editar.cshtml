@@ -1,0 +1,15 @@
+﻿@page
+@model LecturasWeb.Pages.Favoritos.EditarModel
+@{
+    <h2>Editar Favoritos</h2>
+
+    <form method="post">
+        <input type="hidden" asp-for="Favoritos.Id" />
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="Favoritos.Activo" value="true" />
+            <label class="form-check-label">Favoritos Activas</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="/ConfiguracionUsuarios" class="btn btn-secondary">Cancelar</a>
+    </form>
+}

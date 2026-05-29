@@ -1,0 +1,33 @@
+﻿@page
+@model LecturasWeb.Pages.Notificaciones.CrearModel
+@{
+<h2>Crear Notificación</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Mensaje</label>
+        <input asp-for="Notificaciones.Mensaje" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Fecha de envio</label>
+        <input asp-for="Notificaciones.FechaEnvio" type="datetime-local" class="form-control" />
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="Notificaciones.Leida" value="true" />
+        <label class="form-check-label">Activa</label>
+    </div>
+    <div class="mb-3">
+        <label>Usuario</label>
+        <select asp-for="Notificaciones.UsuarioId" class="form-select">
+            <option value="">-- Selecciona usuario --</option>
+            @foreach (var usuario in Model.ListaUsuarios)
+            {
+                <option value="@usuario.Id">@usuario.Nombre</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Notificaciones" class="btn btn-secondary">Cancelar</a>
+</form>
+
+}

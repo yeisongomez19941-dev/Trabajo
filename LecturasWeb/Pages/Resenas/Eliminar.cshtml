@@ -1,0 +1,60 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Resenas.EliminarModel
+@{
+    ViewData["Title"] = "Eliminar Reseña";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">Eliminar Reseña</h4>
+            </div>
+            <div class="card-body">
+
+                <p class="mb-3">¿Estás seguro de que deseas eliminar esta reseña?</p>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Libro</th>
+                        <td>@(Model.Resenas._LibroId?.Titulo ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <th>Usuario</th>
+                        <td>@(Model.Resenas._UsuarioId?.Email ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <th>Calificación</th>
+                        <td>@Model.Resenas.Calificacion.ToString("F1") ★</td>
+                    </tr>
+                    <tr>
+                        <th>Comentario</th>
+                        <td>@Model.Resenas.Comentario</td>
+                    </tr>
+                    <tr>
+                        <th>Estado</th>
+                        <td>
+                            @if (Model.Resenas.EsBuenaResena())
+                            {
+                                <span class="badge bg-success">Buena reseña</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Regular</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Resenas.Id" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                        <a asp-page="/Resenas/Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

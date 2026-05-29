@@ -1,0 +1,6 @@
+@asp_Lecturas_HostAddress = http://localhost:5080
+
+GET {{asp_Lecturas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

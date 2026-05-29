@@ -1,0 +1,19 @@
+﻿@page
+@model LecturasWeb.Pages.Favoritos.CrearModel
+@{
+    <h2>Crear Favoritos</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label>Fecha de marcado</label>
+            <input asp-for="Favoritos.FechaMarcado" type="date" class="form-control" min="1800-01-01" />
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="Favoritos.Activo" value="true" />
+            <label class="form-check-label">Activo</label>
+        </div>
+ 
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="/Favoritos" class="btn btn-secondary">Cancelar</a>
+    </form>
+}

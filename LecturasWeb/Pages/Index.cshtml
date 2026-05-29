@@ -1,0 +1,276 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LecturasWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar {
+            width: 60px; background: #1a1a2e;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 16px 0; gap: 8px; height: 100vh;
+            position: fixed; left: 0; top: 0; justify-content: flex-start;
+        }
+        .sidebar-logo {
+            width: 36px; height: 36px; background: #e8c547;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-weight: 800; color: #1a1a2e;
+            font-size: 16px; margin-bottom: 16px;
+        }
+        .sidebar-item {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 18px; cursor: pointer;
+            text-decoration: none; transition: all 0.2s;
+        }
+        .sidebar-item:hover, .sidebar-item.active { background: #e8c547; color: #1a1a2e; }
+        .main { margin-left: 60px; flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .topbar {
+            background: white; padding: 12px 24px;
+            display: flex; align-items: center; gap: 16px;
+            border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10;
+        }
+        .topbar-brand { font-weight: 700; font-size: 18px; color: #1a1a2e; margin-right: 8px; }
+        .topbar-search {
+            flex: 1; max-width: 480px; background: #f5f5f0; border: none;
+            border-radius: 20px; padding: 8px 16px 8px 36px; font-size: 14px; outline: none;
+        }
+        .search-wrap { position: relative; flex: 1; max-width: 480px; }
+        .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #aaa; }
+        .topbar-actions { display: flex; gap: 12px; align-items: center; margin-left: auto; }
+        .topbar-icon { color: #555; font-size: 20px; cursor: pointer; text-decoration: none; }
+        .topbar-icon:hover { color: #1a1a2e; }
+        .content { flex: 1; overflow-y: auto; padding: 24px; }
+        .hero {
+            background: #1a1a2e; border-radius: 16px; padding: 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 32px; overflow: hidden; position: relative;
+        }
+        .hero-text { z-index: 1; }
+        .hero-badge { color: #e8c547; font-size: 12px; font-weight: 600; letter-spacing: 2px; margin-bottom: 12px; }
+        .hero-title { color: white; font-size: 42px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+        .hero-title em { color: #e8c547; font-style: italic; }
+        .hero-sub { color: #aaa; font-size: 15px; max-width: 380px; margin-bottom: 24px; line-height: 1.6; }
+        .hero-btn {
+            background: #e8c547; color: #1a1a2e; border: none; border-radius: 8px;
+            padding: 12px 24px; font-weight: 700; font-size: 15px;
+            cursor: pointer; text-decoration: none; display: inline-block;
+        }
+        .hero-btn:hover { background: #d4b03a; color: #1a1a2e; }
+        .tabs { display: flex; gap: 24px; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .tab {
+            background: none; border: none; font-size: 15px; color: #888;
+            padding: 8px 0; cursor: pointer; border-bottom: 2px solid transparent;
+            margin-bottom: -2px; font-weight: 500;
+        }
+        .tab.active { color: #1a1a2e; border-bottom-color: #1a1a2e; }
+        .book-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .book-card { cursor: pointer; }
+        .book-cover {
+            border-radius: 10px; aspect-ratio: 2/3;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 12px;
+            position: relative; margin-bottom: 10px; overflow: hidden;
+        }
+        .book-cover-0 { background: linear-gradient(135deg, #2d6a8f, #1a3a5c); }
+        .book-cover-1 { background: linear-gradient(135deg, #4a7c59, #2d5a3d); }
+        .book-cover-2 { background: linear-gradient(135deg, #8b3a3a, #5c1e1e); }
+        .book-cover-3 { background: linear-gradient(135deg, #6b4fa0, #3d2060); }
+        .book-cover-4 { background: linear-gradient(135deg, #2d7a7a, #1a4d4d); }
+        .fav-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 13px; cursor: pointer; border: none;
+        }
+        .fav-btn:hover { background: rgba(255,255,255,0.4); }
+        .cover-title { color: white; font-size: 12px; font-weight: 700; line-height: 1.3; }
+        .book-name { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 2px; }
+        .book-author { font-size: 12px; color: #888; margin-bottom: 6px; }
+        .book-genre {
+            font-size: 10px; font-weight: 700; letter-spacing: 1px;
+            padding: 2px 8px; border-radius: 20px; background: #f0ece0; color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">L</div>
+    <a asp-page="/Index" class="sidebar-item active" title="Inicio"><i class="bi bi-house-fill"></i></a>
+    <a asp-page="/Libros" class="sidebar-item" title="Libros"><i class="bi bi-book"></i></a>
+    <a asp-page="/Favoritos" class="sidebar-item" title="Favoritos"><i class="bi bi-heart"></i></a>
+    <a asp-page="/HistorialLecturas" class="sidebar-item" title="Historial"><i class="bi bi-clock-history"></i></a>
+    <a asp-page="/Estadisticas" class="sidebar-item" title="Estadísticas"><i class="bi bi-bar-chart"></i></a>
+    <a asp-page="/Logros" class="sidebar-item" title="Logros"><i class="bi bi-star"></i></a>
+    <a asp-page="/CalendarioLecturas" class="sidebar-item" title="Calendario"><i class="bi bi-calendar3"></i></a>
+    <a asp-page="/ConfiguracionUsuarios" class="sidebar-item" title="Configuración" style="position:fixed;bottom:16px;left:10px;">
+        <i class="bi bi-gear"></i>
+    </a>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <span class="topbar-brand">LecturasWeb</span>
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchInput" class="topbar-search"
+                   placeholder="Buscar libros, autores, géneros..."
+                   oninput="buscarLibros(this.value)" />
+        </div>
+        <div class="topbar-actions">
+            <a asp-page="/Favoritos" class="topbar-icon" title="Favoritos"><i class="bi bi-heart"></i></a>
+            <a asp-page="/Notificaciones" class="topbar-icon" title="Notificaciones"><i class="bi bi-bell"></i></a>
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <a asp-page="/Account/Logout" class="topbar-icon" title="Cerrar sesión"><i class="bi bi-person-check-fill"></i></a>
+            }
+            else
+            {
+                <a asp-page="/Account/Login" class="topbar-icon" title="Iniciar sesión"><i class="bi bi-person"></i></a>
+            }
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="hero">
+            <div class="hero-text">
+                <div class="hero-badge">📚 COLECCIÓN DESTACADA · 2026</div>
+                <h1 class="hero-title">Tu próxima<br><em>gran lectura</em></h1>
+                <p class="hero-sub">Descubre los libros de tu gusto, lleva el registro de tu progreso y conecta con tu comunidad lectora.</p>
+                <a asp-page="/Libros" class="hero-btn">Explorar catálogo</a>
+                <a asp-page="/Resenas" class="btn btn-outline-light ms-2">
+                <i class="bi bi-chat-left-text"></i> Deja tu reseña
+                </a>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="mostrarTab('novedades', this)">Novedades</button>
+            <button class="tab" onclick="mostrarTab('masleidos', this)">Más leídos</button>
+            <button class="tab" onclick="mostrarTab('recomendados', this)">Recomendados</button>
+        </div>
+
+        <!-- Novedades -->
+        <div id="tab-novedades" class="book-grid">
+            @for (int i = 0; i < Model.LibrosDestacados.Count; i++)
+            {
+                var libro = Model.LibrosDestacados[i];
+                var esFavorito = Model.LibrosFavoritos.Contains(libro.Id);
+                <div class="book-card">
+                    <a asp-page="/Libros/Detalle" asp-route-id="@libro.Id" style="text-decoration:none;">
+                        <div class="book-cover @(string.IsNullOrEmpty(libro.ImagenUrl) ? "book-cover-" + (i % 5) : "")" style="@(!string.IsNullOrEmpty(libro.ImagenUrl) ? $"background-image:url('{libro.ImagenUrl}');background-size:cover;background-position:center;" : "")">
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                                <form method="post" asp-page-handler="ToggleFavorito">
+                                    <input type="hidden" name="libroId" value="@libro.Id" />
+                                    <button type="submit" class="fav-btn" title="@(esFavorito ? "Quitar favorito" : "Agregar a favoritos")">
+                                        <i class="bi @(esFavorito ? "bi-heart-fill text-warning" : "bi-heart")"></i>
+                                    </button>
+                                </form>
+                            }
+                            <div class="cover-title">@libro.Titulo</div>
+                        </div>
+                    </a>
+                    <div class="book-name">@libro.Titulo</div>
+                    <div class="book-author">@libro.Autor</div>
+                    <span class="book-genre">@(libro._GeneroId?.Nombre ?? "LIBRO")</span>
+                </div>
+            }
+        </div>
+
+        <!-- Más leídos -->
+        <div id="tab-masleidos" class="book-grid" style="display:none;">
+            @for (int i = 0; i < Model.LibrosMasLeidos.Count; i++)
+            {
+                var libro = Model.LibrosMasLeidos[i];
+                var esFavorito = Model.LibrosFavoritos.Contains(libro.Id);
+                <div class="book-card">
+                    <a asp-page="/Libros/Detalle" asp-route-id="@libro.Id" style="text-decoration:none;">
+                        <div class="book-cover @(string.IsNullOrEmpty(libro.ImagenUrl) ? "book-cover-" + (i % 5) : "")" style="@(!string.IsNullOrEmpty(libro.ImagenUrl) ? $"background-image:url('{libro.ImagenUrl}');background-size:cover;background-position:center;" : "")">
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                                <form method="post" asp-page-handler="ToggleFavorito">
+                                    <input type="hidden" name="libroId" value="@libro.Id" />
+                                    <button type="submit" class="fav-btn" title="@(esFavorito ? "Quitar favorito" : "Agregar a favoritos")">
+                                        <i class="bi @(esFavorito ? "bi-heart-fill text-warning" : "bi-heart")"></i>
+                                    </button>
+                                </form>
+                            }
+                            <div class="cover-title">@libro.Titulo</div>
+                        </div>
+                    </a>
+                    <div class="book-name">@libro.Titulo</div>
+                    <div class="book-author">@libro.Autor</div>
+                    <span class="book-genre">@(libro._GeneroId?.Nombre ?? "LIBRO")</span>
+                </div>
+            }
+        </div>
+
+        <!-- Recomendados -->
+        <div id="tab-recomendados" class="book-grid" style="display:none;">
+        <div class="text-center py-4">
+        <a asp-page="/Recomendaciones" class="btn btn-primary">Ver mis recomendaciones</a>
+        </div>
+            @for (int i = 0; i < Model.LibrosRecomendados.Count; i++)
+            {
+                var libro = Model.LibrosRecomendados[i];
+                var esFavorito = Model.LibrosFavoritos.Contains(libro.Id);
+                <div class="book-card">
+                    <a asp-page="/Libros/Detalle" asp-route-id="@libro.Id" style="text-decoration:none;">
+                       <div class="book-cover @(string.IsNullOrEmpty(libro.ImagenUrl) ? "book-cover-" + (i % 5) : "")" style="@(!string.IsNullOrEmpty(libro.ImagenUrl) ? $"background-image:url('{libro.ImagenUrl}');background-size:cover;background-position:center;" : "")">
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                                <form method="post" asp-page-handler="ToggleFavorito">
+                                    <input type="hidden" name="libroId" value="@libro.Id" />
+                                    <button type="submit" class="fav-btn" title="@(esFavorito ? "Quitar favorito" : "Agregar a favoritos")">
+                                        <i class="bi @(esFavorito ? "bi-heart-fill text-warning" : "bi-heart")"></i>
+                                    </button>
+                                </form>
+                            }
+                            <div class="cover-title">@libro.Titulo</div>
+                        </div>
+                    </a>
+                    <div class="book-name">@libro.Titulo</div>
+                    <div class="book-author">@libro.Autor</div>
+                    <span class="book-genre">@(libro._GeneroId?.Nombre ?? "LIBRO")</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function mostrarTab(tab, btn) {
+        document.querySelectorAll('.book-grid').forEach(g => g.style.display = 'none');
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tab).style.display = 'grid';
+        btn.classList.add('active');
+    }
+
+    function buscarLibros(query) {
+        const q = query.toLowerCase().trim();
+        const cards = document.querySelectorAll('.book-card');
+        cards.forEach(card => {
+            const titulo = card.querySelector('.book-name')?.textContent.toLowerCase() ?? '';
+            const autor = card.querySelector('.book-author')?.textContent.toLowerCase() ?? '';
+            const genero = card.querySelector('.book-genre')?.textContent.toLowerCase() ?? '';
+            const coincide = titulo.includes(q) || autor.includes(q) || genero.includes(q);
+            card.style.display = coincide ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.HistorialLecturas.EliminarModel
+@{
+    Layout = null;
+}
+
+<div>
+    <p>¿Estás seguro que deseas eliminar este registro?</p>
+    <p><strong>Libro ID:</strong> @Model.Historial.LibroId</p>
+    <p><strong>Fecha Inicio:</strong> @Model.Historial.FechaInicio?.ToString("dd/MM/yyyy")</p>
+    <p><strong>Páginas leídas:</strong> @Model.Historial.PaginasLeidas</p>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Historial.Id" />
+    <input type="hidden" asp-for="Historial.UsuarioId" />
+    <input type="hidden" asp-for="Historial.LibroId" />
+    <input type="hidden" asp-for="Historial.PaginasLeidas" />
+
+    <button type="submit" class="btn btn-danger mt-3">
+        <i class="bi bi-trash"></i> Eliminar
+    </button>
+    <a asp-page="/HistorialLecturas" class="btn btn-secondary mt-3">Cancelar</a>
+</form>

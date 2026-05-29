@@ -1,0 +1,13 @@
+﻿@page
+@model LecturasWeb.Pages.Favoritos.EliminarModel
+@{
+    <h2>¿Eliminar este Favorito?</h2>
+
+    <p><strong>Notificaciones:</strong> @(Model.Favoritos.Activo == true ? "Activas" : "Inactivas")</p>
+
+    <form method="post">
+        <input type="hidden" asp-for="Favoritos.Id" />
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a asp-page="/Favoritos" class="btn btn-secondary">Cancelar</a>
+    </form>
+}

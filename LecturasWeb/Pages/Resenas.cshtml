@@ -1,0 +1,209 @@
+﻿@page
+@model LibreriaLecturas.Pages.ResenasModel
+@{
+    ViewData["Title"] = "Reseñas de la pagina WEB";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Reseñas de la pagina WEB</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalResena" onclick="prepararNueva()">
+        + Nueva reseña
+    </button>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Mensaje))
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @Model.Mensaje
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted">Total reseñas</h6>
+                <h3>@Model.Resenas.Count</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted">Buenas reseñas</h6>
+                <h3 class="text-success">@Model.Resenas.Count(r => r.EsBuenaResena())</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted">Promedio</h6>
+                <h3 class="text-warning">
+                    @(Model.Resenas.Any() ? Model.Resenas.Average(r => r.Calificacion).ToString("F1") : "—") ★
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    
+                    <th>Usuario</th>
+                    <th>Calificación</th>
+                    <th>Comentario</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var resena in Model.Resenas)
+                {
+                    <tr>
+                        <td>@resena.Id</td>
+                      
+                        <td>@(resena._UsuarioId?.Email ?? "—")</td>
+                        <td>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span style="color: @(i <= (int)resena.Calificacion ? "#f59e0b" : "#d1d5db")">★</span>
+                            }
+                            <small class="text-muted">@resena.Calificacion.ToString("F1")</small>
+                        </td>
+                        <td class="text-truncate" style="max-width: 200px;">
+                            @resena.Comentario
+                        </td>
+                        <td>
+                            @if (resena.EsBuenaResena())
+                            {
+                                <span class="badge bg-success">Buena</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Regular</span>
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary"
+                                    onclick="prepararEdicion(@resena.Id, @resena.Calificacion, '@resena.Comentario', @(resena.UsuarioId ?? 0))"
+                                    data-bs-toggle="modal" data-bs-target="#modalResena">
+                                Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="confirmarBorrar(@resena.Id)"
+                                    data-bs-toggle="modal" data-bs-target="#modalBorrar">
+                                Borrar
+                            </button>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Resenas.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No hay reseñas registradas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Guardar / Modificar -->
+<div class="modal fade" id="modalResena" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Nueva reseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Resena.Id" id="resenaId" />
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <select asp-for="Resena.UsuarioId" class="form-select"
+                                asp-items="@(new SelectList(Model.Usuarios, "Id", "Email"))">
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Calificación (1 – 5)</label>
+                        <input asp-for="Resena.Calificacion" class="form-control"
+                               type="number" min="1" max="5" step="0.1" id="calificacionInput" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Comentario</label>
+                        <textarea asp-for="Resena.Comentario" class="form-control" rows="3"
+                                  id="comentarioInput"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" asp-page-handler="Guardar" id="btnGuardar" class="btn btn-primary">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Borrar -->
+<div class="modal fade" id="modalBorrar" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar esta reseña?</p>
+                    <input type="hidden" name="id" id="borrarId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" asp-page-handler="Borrar" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function prepararNueva() {
+            document.getElementById('modalTitulo').textContent = 'Nueva reseña';
+            document.getElementById('resenaId').value = '0';
+            document.getElementById('calificacionInput').value = '';
+            document.getElementById('comentarioInput').value = '';
+
+            document.querySelector('[name="Resena.UsuarioId"]').value = '';
+            document.getElementById('btnGuardar').textContent = 'Guardar';
+        }
+
+        function prepararEdicion(id, calificacion, comentario, usuarioId, libroId) {
+            document.getElementById('modalTitulo').textContent = 'Editar reseña';
+            document.getElementById('resenaId').value = id;
+            document.getElementById('calificacionInput').value = calificacion;
+            document.getElementById('comentarioInput').value = comentario;
+         
+            document.querySelector('[name="Resena.UsuarioId"]').value = usuarioId;
+            document.getElementById('btnGuardar').textContent = 'Guardar cambios';
+        }
+
+        function confirmarBorrar(id) {
+            document.getElementById('borrarId').value = id;
+        }
+    </script>
+}

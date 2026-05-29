@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Presentacion/">
+    <Project Path="Presentacion_Consola/Presentacion_Consola.csproj" Id="a3ec6d8a-6194-4e49-a64b-bb0d74705516" />
+  </Folder>
+  <Project Path="asp_Lecturas/asp_Lecturas.csproj" Id="0df500ee-5d92-45d0-a72f-76a8cb5d51cf" />
+  <Project Path="LecturasWeb/LecturasWeb.csproj" Id="4cc3b67a-fbfb-4173-ade8-4dd0ea43bf41" />
+  <Project Path="Libreria_Lecturas/Libreria_Lecturas.csproj" Id="61d4ab76-9370-4d88-96dd-fdabc2af861c" />
+</Solution>

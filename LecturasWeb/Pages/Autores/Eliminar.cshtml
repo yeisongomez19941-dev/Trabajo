@@ -1,0 +1,21 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Autores_Pages.EliminarModel
+
+<h2>Eliminar Autor</h2>
+
+<p>¿Está seguro que desea eliminar este autor?</p>
+
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Model.Autor.Nombre</dd>
+    <dt>Nacionalidad</dt>
+    <dd>@Model.Autor.Nacionalidad</dd>
+    <dt>Fecha Nacimiento</dt>
+    <dd>@Model.Autor.FechaNacimiento.ToShortDateString()</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Autor.Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-page="/Autores" class="btn btn-secondary">Cancelar</a>
+</form>

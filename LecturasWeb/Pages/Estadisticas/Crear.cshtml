@@ -1,0 +1,28 @@
+﻿@page
+@model LecturasWeb.Pages.Estadisticas.CrearModel
+@{
+
+<h2>Crear Libro</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Título</label>
+ 
+    <div class="mb-3">
+        <label>Libros leidos</label>
+        <input asp-for="Estadisticas.LibrosLeidos" type= "number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Paginas totales leidas</label>
+        <input asp-for="Estadisticas.PaginasTotales" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+    <label>Promedio de paginas</label>
+    <input asp-for="Estadisticas.PromedioPaginas" type="number" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Estadisticas" class="btn btn-secondary">Cancelar</a>
+        </div>
+</form>
+
+}

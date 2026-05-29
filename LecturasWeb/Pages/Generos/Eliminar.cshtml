@@ -1,0 +1,18 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Generos.EliminarModel
+
+<h2>Eliminar Genero</h2>
+
+<p>¿Está seguro que desea eliminar este genero?</p>
+
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Model.Generos.Nombre</dd>
+
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Generos.Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-page="/Generos" class="btn btn-secondary">Cancelar</a>
+</form>

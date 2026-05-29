@@ -1,0 +1,25 @@
+﻿@page
+@model LecturasWeb.Pages.Autores_Pages.CrearModel
+
+<h2>Crear Autor</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Nombre</label>
+        <input asp-for="Autor.Nombre" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Nacionalidad</label>
+        <input asp-for="Autor.Nacionalidad" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Fecha Nacimiento</label>
+        <input asp-for="Autor.FechaNacimiento" type="date" class="form-control" min="1800-01-01" />
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="Autor.Activo" value="true" />
+        <label class="form-check-label">Activo</label>
+    </div> 
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Autores" class="btn btn-secondary">Cancelar</a>
+</form>

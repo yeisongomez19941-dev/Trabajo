@@ -1,0 +1,29 @@
+﻿@page
+@model LecturasWeb.Pages.Logros.CrearModel
+@{
+<h2>Crear logro</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Nombre del logro</label>
+        <input asp-for="Logros.Nombre" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Descripcion del logro</label>
+        <input asp-for="Logros.Descripcion" class="form-control" />
+    </div>
+    <div class="mb-3">
+         <label>Puntos del logro</label>
+         <input asp-for="Logros.Puntos" type="number" class="form-control" />
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="Logros.Activo" value="true" />
+        <label class="form-check-label">Activo</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Logros" class="btn btn-secondary">Cancelar</a>
+</form>
+}
+
+
+

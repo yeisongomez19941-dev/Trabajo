@@ -1,0 +1,11 @@
+﻿@page
+@model LecturasWeb.Pages.Estadisticas.EliminarModel
+@{
+    <h2>¿Eliminar esta estadistica? </h2>
+
+    <form method="post">
+        <input type="hidden" asp-for="Estadisticas.Id" />
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a asp-page="/Estadisticas" class="btn btn-secondary">Cancelar</a>
+    </form>
+}

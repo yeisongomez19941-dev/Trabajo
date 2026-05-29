@@ -1,0 +1,21 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.CalendarioLecturas_Pages.EliminarModel
+
+<h2>Eliminar Calendario de Lectura</h2>
+
+<p>¿Está seguro que desea eliminar este registro?</p>
+
+<dl>
+    <dt>Fecha</dt>
+    <dd>@(Model.Calendario.Fecha.HasValue ? Model.Calendario.Fecha.Value.ToShortDateString() : "Sin fecha")</dd>
+    <dt>Páginas Leídas</dt>
+    <dd>@Model.Calendario.PaginasLeidas</dd>
+    <dt>Tiempo (minutos)</dt>
+    <dd>@Model.Calendario.TiempoMinutos</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Calendario.Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-page="/CalendarioLecturas" class="btn btn-secondary">Cancelar</a>
+</form>

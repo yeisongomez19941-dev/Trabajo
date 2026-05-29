@@ -1,0 +1,27 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Autores_Pages.EditarModel
+
+<h2>Editar Autor</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Autor.Id" />
+    <div class="mb-3">
+        <label>Nombre</label>
+        <input asp-for="Autor.Nombre" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Nacionalidad</label>
+        <input asp-for="Autor.Nacionalidad" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Fecha Nacimiento</label>
+        <input asp-for="Autor.FechaNacimiento" type="date" class="form-control" />
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="Autor.Activo" value="true"
+        @(Model.Autor.Activo == true ? "checked" : "") />
+        <label class="form-check-label">Activo</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Autores" class="btn btn-secondary">Cancelar</a>
+</form>

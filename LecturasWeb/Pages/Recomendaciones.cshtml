@@ -1,0 +1,30 @@
+﻿@page
+@model LecturasWeb.Pages.RecomendacionesModel
+
+<h2>Recomendados para ti</h2>
+
+@if (!Model.ListaRecomendaciones.Any())
+{
+    <p>Aún no tienes recomendaciones. ¡Empieza a leer libros para obtenerlas!</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var rec in Model.ListaRecomendaciones)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(rec._LibroId?.ImagenUrl))
+                    {
+                        <img src="@rec._LibroId.ImagenUrl" class="card-img-top" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@rec._LibroId?.Titulo</h5>
+                        <p class="card-text text-muted">@rec._LibroId?.Autor</p>
+                        <p class="card-text"><small>@rec.Motivo</small></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

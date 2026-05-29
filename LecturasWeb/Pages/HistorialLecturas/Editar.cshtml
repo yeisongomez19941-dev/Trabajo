@@ -1,0 +1,27 @@
+﻿
+@page "{id:int}"
+@model LecturasWeb.Pages.HistorialLecturas.EditarModel
+@{
+    Layout = null;
+}
+
+<form method="post">
+    <input type="hidden" asp-for="Historial.Id" />
+
+    <select asp-for="Historial.LibroId" class="form-select">
+        <option value="">-- Selecciona un libro --</option>
+        @foreach (var libro in Model.ListaLibros)
+        {
+            <option value="@libro.Id">@libro.Titulo</option>
+        }
+    </select>
+
+    <input asp-for="Historial.FechaInicio" type="date" class="form-control mt-2" />
+    <input asp-for="Historial.FechaFin" type="date" class="form-control mt-2" />
+    <input asp-for="Historial.PaginasLeidas" type="number" class="form-control mt-2" placeholder="Páginas leídas" />
+
+    <button type="submit" class="btn btn-warning mt-3">
+        <i class="bi bi-pencil"></i> Guardar Cambios
+    </button>
+    <a asp-page="/HistorialLecturas" class="btn btn-secondary mt-3">Cancelar</a>
+</form>

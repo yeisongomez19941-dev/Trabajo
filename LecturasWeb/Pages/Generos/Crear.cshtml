@@ -1,0 +1,15 @@
+﻿@page
+@model LecturasWeb.Pages.Generos.CrearModel
+
+
+    <h2>Crear Generos</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label>Genero</label>
+            <input asp-for="Generos.Nombre" class="form-control" />
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="/Generos" class="btn btn-secondary">Cancelar</a>
+    </div>
+    </form>

@@ -1,0 +1,67 @@
+﻿@page
+@model LecturasWeb.Pages.Account.RegistrarModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - LecturasWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body { background: #f5f5f0; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .card { border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 40px; width: 100%; max-width: 420px; }
+        .brand { font-weight: 800; font-size: 22px; color: #1a1a2e; margin-bottom: 4px; }
+        .brand span { color: #e8c547; }
+        h4 { color: #1a1a2e; font-weight: 700; margin-bottom: 24px; }
+        .form-control { border-radius: 8px; padding: 10px 14px; }
+        .form-control:focus { border-color: #e8c547; box-shadow: 0 0 0 3px rgba(232,197,71,0.2); }
+        .btn-primary { background: #e8c547; border: none; color: #1a1a2e; font-weight: 700; border-radius: 8px; padding: 10px; }
+        .btn-primary:hover { background: #d4b03a; color: #1a1a2e; }
+        .login-link { text-align: center; margin-top: 16px; font-size: 14px; color: #888; }
+        .login-link a { color: #1a1a2e; font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="brand">Lecturas<span>Web</span></div>
+        <h4 class="mt-3">Crear cuenta</h4>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+            @if (!ModelState.IsValid)
+            {
+                <div class="alert alert-danger py-2">
+                    @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                </div>
+            }
+            <div class="mb-3">
+                <label class="form-label fw-600">Nombre</label>
+                <input asp-for="Nombre" class="form-control" placeholder="Tu nombre" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="correo@ejemplo.com" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Mínimo 6 caracteres" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirmar contraseña</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Repite la contraseña" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+        </form>
+
+        <div class="login-link">
+            ¿Ya tienes cuenta? <a asp-page="/Account/Login">Inicia sesión</a>
+        </div>
+    </div>
+</body>
+</html>

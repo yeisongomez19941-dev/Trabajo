@@ -1,0 +1,33 @@
+﻿@page "{id:int}"
+@model LecturasWeb.Pages.Notificaciones.EditarModel
+@{
+    Layout = null;
+}
+
+<form method="post">
+    <input type="hidden" asp-for="Notificaciones.Id" />
+
+    <div class="mb-3">
+        <label>Mensaje</label>
+        <input asp-for="Notificaciones.Mensaje" type="text" class="form-control" />
+    </div>
+
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" asp-for="Notificaciones.Leida" />
+        <label class="form-check-label">Leída</label>
+    </div>
+
+    <div class="mb-3">
+        <label>Usuario</label>
+        <select asp-for="Notificaciones.UsuarioId" class="form-select">
+            <option value="">-- Selecciona usuario --</option>
+            @foreach (var usuario in Model.ListaUsuarios)
+            {
+                <option value="@usuario.Id">@usuario.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+    <a asp-page="/Notificaciones" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,21 @@
+﻿@page
+@model LecturasWeb.Pages.Generos.EditarModel
+
+<h2>Editar Generos</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Genero</label>
+        <input asp-for="Generos.Nombre" class="form-control" />
+        </div>
+     
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="/Generos" class="btn btn-secondary">Cancelar</a>
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="/Generos" class="btn btn-outline-secondary btn-cancelar">
+            <i class="bi bi-x-lg me-1"></i> Cancelar
+        </a>
+    </div>
+    </form>
+

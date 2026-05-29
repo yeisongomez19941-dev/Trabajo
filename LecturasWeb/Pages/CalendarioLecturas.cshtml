@@ -1,0 +1,225 @@
+﻿@page
+@model LecturasWeb.Pages.CalendarioLecturasModel   
+@* Todo lo que hay aca se muestra en /Libros es la interfaz grafica*@
+@{
+
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario Lecturas - LecturasWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; display: flex; height: 100vh; overflow: hidden; }
+
+        .sidebar {
+            width: 60px; background: #1a1a2e;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 16px 0; gap: 8px; height: 100vh;
+            position: fixed; left: 0; top: 0;
+        }
+        .sidebar-logo {
+            width: 36px; height: 36px; background: #e8c547;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-weight: 800; color: #1a1a2e;
+            font-size: 16px; margin-bottom: 16px;
+        }
+        .sidebar-item {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 18px; cursor: pointer;
+            text-decoration: none; transition: all 0.2s;
+            position: relative;
+        }
+        .sidebar-item:hover, .sidebar-item.active { background: #e8c547; color: #1a1a2e; }
+        .sidebar-item .tooltip-label {
+            position: absolute; left: 56px; background: #1a1a2e;
+            color: white; font-size: 12px; padding: 4px 8px;
+            border-radius: 4px; white-space: nowrap;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .sidebar-item:hover .tooltip-label { opacity: 1; }
+
+        .main { margin-left: 60px; flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        .topbar {
+            background: white; padding: 12px 24px;
+            display: flex; align-items: center; gap: 16px;
+            border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10;
+        }
+        .topbar-brand { font-weight: 700; font-size: 18px; color: #1a1a2e; margin-right: 8px; }
+        .search-wrap { position: relative; flex: 1; max-width: 480px; }
+        .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #aaa; }
+        .topbar-search {
+            width: 100%; background: #f5f5f0; border: none; border-radius: 20px;
+            padding: 8px 16px 8px 36px; font-size: 14px; outline: none;
+        }
+        .topbar-actions { display: flex; gap: 12px; align-items: center; margin-left: auto; }
+        .topbar-icon { color: #555; font-size: 20px; cursor: pointer; text-decoration: none; }
+        .topbar-icon:hover { color: #1a1a2e; }
+
+        .content { flex: 1; overflow-y: auto; padding: 24px; }
+
+        .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .page-title { font-size: 24px; font-weight: 800; color: #1a1a2e; }
+
+        .catalogo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 24px;
+        }
+        .libro-card { cursor: pointer; }
+        .libro-portada {
+            width: 100%; aspect-ratio: 2/3; border-radius: 8px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            padding: 12px; margin-bottom: 8px;
+            box-shadow: 3px 4px 12px rgba(0,0,0,0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .libro-portada:hover { transform: translateY(-4px); box-shadow: 3px 8px 20px rgba(0,0,0,0.3); }
+        .portada-0 { background: linear-gradient(160deg, #2d6a8f, #1a3a5c); }
+        .portada-1 { background: linear-gradient(160deg, #4a7c59, #2d5a3d); }
+        .portada-2 { background: linear-gradient(160deg, #8b3a3a, #5c1e1e); }
+        .portada-3 { background: linear-gradient(160deg, #6b4fa0, #3d2060); }
+        .portada-4 { background: linear-gradient(160deg, #2d7a7a, #1a4d4d); }
+        .portada-autor { color: rgba(255,255,255,0.6); font-size: 10px; text-align: center; margin-bottom: 4px; }
+        .portada-titulo { color: white; font-size: 11px; font-weight: 700; text-align: center; text-transform: uppercase; line-height: 1.3; }
+        .libro-nombre { font-size: 13px; font-weight: 700; color: #1a1a2e; text-transform: uppercase; line-height: 1.3; margin-bottom: 2px; }
+        .libro-autor-ext { font-size: 12px; color: #888; }
+        .acciones-admin { margin-top: 6px; display: flex; gap: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">L</div>
+    <a asp-page="/Index" class="sidebar-item" title="Inicio">
+        <i class="bi bi-house-fill"></i>
+        <span class="tooltip-label">Inicio</span>
+    </a>
+    <a asp-page="/Libros" class="sidebar-item active" title="Libros">
+        <i class="bi bi-book"></i>
+        <span class="tooltip-label">Libros</span>
+    </a>
+    <a asp-page="/Favoritos" class="sidebar-item">
+        <i class="bi bi-heart"></i>
+        <span class="tooltip-label">Favoritos</span>
+    </a>
+    <a asp-page="/HistorialLecturas" class="sidebar-item">
+        <i class="bi bi-clock-history"></i>
+        <span class="tooltip-label">Historial</span>
+    </a>
+    <a asp-page="/Estadisticas" class="sidebar-item">
+        <i class="bi bi-bar-chart"></i>
+        <span class="tooltip-label">Estadísticas</span>
+    </a>
+    <a asp-page="/Logros" class="sidebar-item">
+        <i class="bi bi-star"></i>
+        <span class="tooltip-label">Logros</span>
+    </a>
+    <a asp-page="/CalendarioLecturas" class="sidebar-item">
+        <i class="bi bi-calendar3"></i>
+        <span class="tooltip-label">Calendario</span>
+    </a>
+    <a asp-page="/ConfiguracionUsuarios" class="sidebar-item" style="margin-top: auto;">
+    <i class="bi bi-gear"></i>
+    <span class="tooltip-label">Configuración</span>
+</a>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <span class="topbar-brand">LecturasWeb</span>
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" class="topbar-search" placeholder="Buscar libros, autores, géneros..." />
+        </div>
+        <div class="topbar-actions">
+            <a asp-page="/Favoritos" class="topbar-icon"><i class="bi bi-heart"></i></a>
+            <a asp-page="/Notificaciones" class="topbar-icon"><i class="bi bi-bell"></i></a>
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <a asp-page="/Account/Logout" class="topbar-icon" title="Cerrar sesión"><i class="bi bi-person-check-fill"></i></a>
+            }
+            else
+            {
+                <a asp-page="/Account/Login" class="topbar-icon" title="Iniciar sesión"><i class="bi bi-person"></i></a>
+            }
+        </div>
+    </div>
+
+<div class="content">
+    <div class="page-header">
+        <h4 class="page-title">Calendario de Lecturas</h4>
+        
+            <a asp-page="/CalendarioLecturas/Crear" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Agrega tu calendario
+            </a>
+        
+    </div>
+
+    <style>
+        .calendario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .cal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #e8c547;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cal-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+        .cal-fecha {
+            font-size: 12px; font-weight: 700; color: #e8c547;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .cal-stat {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 8px; color: #1a1a2e; font-size: 14px;
+        }
+        .cal-stat i { color: #888; width: 16px; }
+        .cal-stat strong { font-size: 18px; color: #1a1a2e; }
+        .cal-actions { margin-top: 14px; display: flex; gap: 6px; }
+    </style>
+
+    <div class="calendario-grid">
+        @foreach (var item in Model.ListaCalendarioLecturas)
+        {
+            <div class="cal-card">
+                <div class="cal-fecha"><i class="bi bi-calendar3"></i> @item.Fecha?.ToString("dd MMM yyyy")</div>
+                <div class="cal-stat">
+                    <i class="bi bi-file-text"></i>
+                    <div><strong>@item.PaginasLeidas</strong> páginas leídas</div>
+                </div>
+                <div class="cal-stat">
+                    <i class="bi bi-clock"></i>
+                    <div><strong>@item.TiempoMinutos</strong> minutos</div>
+                </div>
+              
+                    <div class="cal-actions">
+                        <a asp-page="/CalendarioLecturas/Editar" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                        <a asp-page="/CalendarioLecturas/Eliminar" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                    </div>
+                
+            </div>
+        }
+    </div>
+</div>
+</div>
+      
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
