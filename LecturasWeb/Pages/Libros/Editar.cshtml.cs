@@ -1,5 +1,6 @@
 using Libreria_Lecturas.Entidades;
 using Libreria_Lecturas.Interfaces;
+using Libreria_Lecturas.Implementaciones;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,16 +10,17 @@ namespace LecturasWeb.Pages.Libros
     {
         private readonly ILibrosNegocio _negocio;
         private readonly IGenerosNegocio _negocioGeneros;
+        private readonly Conexion _context;
 
-        public EditarModel(ILibrosNegocio negocio, IGenerosNegocio negocioGeneros)
+        public EditarModel(ILibrosNegocio negocio, IGenerosNegocio negocioGeneros, Conexion context)
         {
             _negocio = negocio;
             _negocioGeneros = negocioGeneros;
+            _context = context;
         }
 
         [BindProperty]
         public Libreria_Lecturas.Entidades.Libros Libro { get; set; } = new();
-
         public List<Libreria_Lecturas.Entidades.Generos> ListaGeneros { get; set; } = new();
 
         public IActionResult OnGet(int id)
@@ -37,6 +39,7 @@ namespace LecturasWeb.Pages.Libros
                 return Page();
             }
             _negocio.Modificar(Libro);
+            AuditoriaHelper.Registrar(_context, "Libros", "Modificar", User.Identity?.Name ?? "sistema", $"Libro modificado: \"{Libro.Titulo}\"");
             return RedirectToPage("/Libros");
         }
     }

@@ -101,9 +101,15 @@ namespace LecturasWeb.Pages
             var existente = _favoritosNegocio.Consultar(usuarioDb.Id)
                 .FirstOrDefault(f => f.LibroId == libroId);
 
+            var libro = _context.Libros.FirstOrDefault(l => l.Id == libroId);
+
             if (existente != null)
+            {
                 _favoritosNegocio.Borrar(existente);
+                AuditoriaHelper.Registrar(_context, "Favoritos", "Eliminar", identityUser!.Email!, $"Quitó favorito: \"{libro?.Titulo}\"");
+            }
             else
+            {
                 _favoritosNegocio.Guardar(new Libreria_Lecturas.Entidades.Favoritos
                 {
                     LibroId = libroId,
@@ -111,6 +117,8 @@ namespace LecturasWeb.Pages
                     FechaMarcado = DateTime.UtcNow,
                     Activo = true
                 });
+                AuditoriaHelper.Registrar(_context, "Favoritos", "Crear", identityUser!.Email!, $"Agregó favorito: \"{libro?.Titulo}\"");
+            }
 
             return RedirectToPage();
         }

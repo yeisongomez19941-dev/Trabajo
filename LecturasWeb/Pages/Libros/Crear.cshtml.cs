@@ -1,4 +1,5 @@
 using Libreria_Lecturas.Entidades;
+using Libreria_Lecturas.Implementaciones;
 using Libreria_Lecturas.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,11 +10,13 @@ namespace LecturasWeb.Pages.Libros
     {
         private readonly ILibrosNegocio _negocio;
         private readonly IGenerosNegocio _negocioGeneros;
+        private readonly Conexion _context;
 
-        public CrearModel(ILibrosNegocio negocio, IGenerosNegocio negocioGeneros)
+        public CrearModel(ILibrosNegocio negocio, IGenerosNegocio negocioGeneros, Conexion context)
         {
             _negocio = negocio;
             _negocioGeneros = negocioGeneros;
+            _context = context;
         }
 
         [BindProperty]
@@ -30,7 +33,9 @@ namespace LecturasWeb.Pages.Libros
         {
             if (!ModelState.IsValid) return Page();
             _negocio.Guardar(Libro);
+            AuditoriaHelper.Registrar(_context, "Libros", "Crear", User.Identity?.Name ?? "sistema", $"Libro creado: \"{Libro.Titulo}\"");
             return RedirectToPage("/Libros");
+   
         }
     }
 }

@@ -23,9 +23,9 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Add(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("CalendarioLecturas", "Crear",
+            _auditorias.Registrar("ConfiguracionUsuarios", "Crear",
                "Sistema",
-               $"CalendarioLecturas creado: {entidad.Id}");
+               $"ConfiguracionUsuarios creado: {entidad.Id}");
             return entidad;
         }
 
@@ -33,8 +33,8 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Update(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("CalendarioLecturas", "Editar",
-               "Sistema",$"CalendarioLecturas editado: {entidad.Id}");
+            _auditorias.Registrar("ConfiguracionUsuarios", "Editar",
+               "Sistema",$"ConfiguracionUsuarios editado: {entidad.Id}");
             return entidad;
         }
 
@@ -42,9 +42,9 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.ConfiguracionUsuarios.Remove(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("CalendarioLecturas", "Eliminar",
+            _auditorias.Registrar("ConfiguracionUsuarios", "Eliminar",
                entidad._UsuarioId?.Email ?? "Sistema",
-               $"Calendario eliminado. Id: {entidad.Id}");
+               $"ConfiguracionUsuarios eliminado. Id: {entidad.Id}");
             return true;
         }
     }

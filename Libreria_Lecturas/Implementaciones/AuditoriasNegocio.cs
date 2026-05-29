@@ -30,8 +30,6 @@ namespace Libreria_Lecturas.Implementaciones
         }
 
         public List<Auditorias> Consultar()
-            => _context.Auditorias
-                       .OrderByDescending(a => a.Fecha)
-                       .ToList();
+            => _context.Auditorias.OrderByDescending(a => a.Fecha).ToList();
     }
 }

@@ -32,6 +32,7 @@ builder.Services.AddScoped<IRecomendacionesNegocio, RecomendacionesNegocio>();
 builder.Services.AddScoped<IResenasNegocio, ResenasNegocio>();
 builder.Services.AddScoped<ISeccionLecturasNegocio, SeccionLecturasNegocio>();
 builder.Services.AddScoped<IUsuariosNegocio, UsuariosNegocio>();
+builder.Services.AddScoped<IAuditoriasNegocio, AuditoriasNegocio>();
 
 var app = builder.Build();
 

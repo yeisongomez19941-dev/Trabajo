@@ -28,6 +28,7 @@ namespace Libreria_Lecturas.Interfaces
         DbSet<Resenas> Resenas { get; set; }
         DbSet<SeccionLecturas> SeccionLecturas { get; set; }
         DbSet<Usuarios> Usuarios { get; set; }
+        DbSet<Auditorias> Auditorias { get; set; }
 
         EntityEntry<T> Entry<T>(T entity) where T : class;
         int SaveChanges();

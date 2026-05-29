@@ -1,5 +1,5 @@
 ﻿using Libreria_Lecturas.Entidades;
-using Libreria_Lecturas.Implementaciones;
+
 namespace Libreria_Lecturas.Interfaces
 {
     public interface IConfiguracionUsuariosNegocio

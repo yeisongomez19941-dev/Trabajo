@@ -7,35 +7,33 @@ using System.Text;
 namespace Libreria_Lecturas.Implementaciones
 {
 
-        public class EditorialesNegocio : IEditorialesNegocio
+    public class EditorialesNegocio : IEditorialesNegocio
+    {
+        private readonly Conexion _context;
+
+
+        public EditorialesNegocio(Conexion context)
         {
-            private readonly Conexion _context;
-            private readonly IAuditoriasNegocio _auditorias;
+            _context = context;
 
-        public EditorialesNegocio(Conexion context, IAuditoriasNegocio auditorias)
-            {
-                _context = context;
-                _auditorias = auditorias;
-            }
+        }
 
-            public List<Editoriales> Consultar()
-                => _context.Editoriales.ToList();
+        public List<Editoriales> Consultar()
+            => _context.Editoriales.ToList();
 
-            public Editoriales Guardar(Editoriales entidad)
-            {
-                _context.Editoriales.Add(entidad);
-                _context.SaveChanges();
-                 _auditorias.Registrar("Editoriales", "Crear",
-                "Sistema", $"Editoriales creado: {entidad.Id}");
+        public Editoriales Guardar(Editoriales entidad)
+        {
+            _context.Editoriales.Add(entidad);
+            _context.SaveChanges();
+
             return entidad;
         }
 
-            public Editoriales Modificar(Editoriales entidad)
-            {
-                _context.Editoriales.Update(entidad);
-                _context.SaveChanges();
-                _auditorias.Registrar("Editoriales", "Editar",
-                "Sistema",$"Editoriales editado: {entidad.Id}");
+        public Editoriales Modificar(Editoriales entidad)
+        {
+            _context.Editoriales.Update(entidad);
+            _context.SaveChanges();
+
             return entidad;
         }
 
@@ -44,10 +42,10 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.Editoriales.Remove(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("Editoriales", "Eliminar",
-                "Sistema",
-                $"Editorial eliminada. Id: {entidad.Id} - {entidad.Nombre}");
+
             return true;
         }
+
     }
+
 }

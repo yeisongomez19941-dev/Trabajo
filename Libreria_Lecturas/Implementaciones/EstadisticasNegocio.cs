@@ -9,11 +9,10 @@ namespace Libreria_Lecturas.Implementaciones
     public class EstadisticasNegocio : IEstadisticasNegocio
     {
         private readonly Conexion _context;
-        private readonly IAuditoriasNegocio _auditorias;
-        public EstadisticasNegocio(Conexion context, IAuditoriasNegocio auditorias)
+       
+        public EstadisticasNegocio(Conexion context)
         {
             _context = context;
-            _auditorias = auditorias; 
         }
 
         public List<Estadisticas> Consultar()
@@ -26,8 +25,7 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.Estadisticas.Add(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("Estadisticas", "Crear",
-               "Sistema", $"Estadistica creada: {entidad.Id}");
+        
             return entidad;
         }
 
@@ -35,8 +33,7 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.Estadisticas.Update(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("Estadistica", "Editar",
-               "Sistema", $"Estadistica creada: {entidad.Id}");
+          
             return entidad;
         }
 
@@ -44,9 +41,6 @@ namespace Libreria_Lecturas.Implementaciones
         {
             _context.Estadisticas.Remove(entidad);
             _context.SaveChanges();
-            _auditorias.Registrar("Estadistica", "Eliminar",
-                 entidad._UsuarioId?.Email ?? "Sistema",
-                 $"Estadistica eliminada. Id: {entidad.Id}");
             return true;
         }
     
