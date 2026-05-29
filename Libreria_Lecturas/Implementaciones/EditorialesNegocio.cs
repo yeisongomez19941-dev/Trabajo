@@ -25,8 +25,8 @@ namespace Libreria_Lecturas.Implementaciones
             {
                 _context.Editoriales.Add(entidad);
                 _context.SaveChanges();
-                 _auditorias.Registrar("CalendarioLecturas", "Crear",
-                "Sistema", $"CalendarioLecturas creado: {entidad.Id}");
+                 _auditorias.Registrar("Editoriales", "Crear",
+                "Sistema", $"Editoriales creado: {entidad.Id}");
             return entidad;
         }
 
@@ -34,8 +34,8 @@ namespace Libreria_Lecturas.Implementaciones
             {
                 _context.Editoriales.Update(entidad);
                 _context.SaveChanges();
-                _auditorias.Registrar("CalendarioLecturas", "Editar",
-                "Sistema",$"CalendarioLecturas editado: {entidad.Id}");
+                _auditorias.Registrar("Editoriales", "Editar",
+                "Sistema",$"Editoriales editado: {entidad.Id}");
             return entidad;
         }
 
