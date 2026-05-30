@@ -1,32 +1,41 @@
+using Libreria_Lecturas.Entidades;
 using Libreria_Lecturas.Implementaciones;
 using Libreria_Lecturas.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
 
 namespace LecturasWeb.Pages.Libros
 {
     public class DetalleModel : PageModel
     {
         private readonly ILibrosNegocio _negocio;
+        private readonly ILecturasNegocio _lecturasNegocio;
+        private readonly IProgresoLecturasNegocio _progresoNegocio;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly Conexion _context;
 
         public DetalleModel(
             ILibrosNegocio negocio,
+            ILecturasNegocio lecturasNegocio,
+            IProgresoLecturasNegocio progresoNegocio,
             UserManager<IdentityUser> userManager,
             Conexion context)
         {
             _negocio = negocio;
+            _lecturasNegocio = lecturasNegocio;
+            _progresoNegocio = progresoNegocio;
             _userManager = userManager;
             _context = context;
         }
 
         public Libreria_Lecturas.Entidades.Libros Libro { get; set; } = new();
         public Libreria_Lecturas.Entidades.HistorialLecturas? HistorialActual { get; set; }
+        public Libreria_Lecturas.Entidades.Lecturas? LecturaActual { get; set; }
+        public List<Libreria_Lecturas.Entidades.ProgresoLecturas> ListaProgreso { get; set; } = new();
 
         [BindProperty]
         public int PaginasLeidas { get; set; }
@@ -45,6 +54,19 @@ namespace LecturasWeb.Pages.Libros
                 {
                     HistorialActual = _context.HistorialLecturas
                         .FirstOrDefault(h => h.UsuarioId == usuarioDb.Id && h.LibroId == id && h.FechaFin == null);
+
+                    // Lectura activa
+                    LecturaActual = _context.Lecturas
+                        .FirstOrDefault(l => l.UsuarioId == usuarioDb.Id && l.LibroId == id && !l.Estado);
+
+                    // Progreso de la lectura actual
+                    if (LecturaActual != null)
+                    {
+                        ListaProgreso = _context.ProgresoLecturas
+                            .Where(p => p.LecturaId == LecturaActual.Id)
+                            .OrderByDescending(p => p.FechaActualizacion)
+                            .ToList();
+                    }
                 }
             }
 
@@ -60,36 +82,66 @@ namespace LecturasWeb.Pages.Libros
 
             if (usuarioDb == null) return RedirectToPage("/Account/Login");
 
+            // Buscar o crear Lectura
+            var lectura = _context.Lecturas
+                .FirstOrDefault(l => l.UsuarioId == usuarioDb.Id && l.LibroId == id && !l.Estado);
+
+            if (lectura == null)
+            {
+                lectura = new Libreria_Lecturas.Entidades.Lecturas
+                {
+                    UsuarioId = usuarioDb.Id,
+                    LibroId = id,
+                    FechaInicio = DateTime.Now,
+                    Estado = false
+                };
+                _context.Lecturas.Add(lectura);
+                await _context.SaveChangesAsync();
+            }
+
+            // Registrar progreso
+            var progreso = new Libreria_Lecturas.Entidades.ProgresoLecturas
+            {
+                LecturaId = lectura.Id,
+                PaginasLeidas = PaginasLeidas,
+                FechaActualizacion = DateTime.Now
+            };
+            progreso.CalcularPorcentaje(Libro.PaginasTotales);
+            _context.ProgresoLecturas.Add(progreso);
+
+            // Si terminó el libro
+            if (PaginasLeidas >= Libro.PaginasTotales)
+            {
+                lectura.Estado = true;
+                lectura.FechaFin = DateTime.Now;
+                _context.Lecturas.Update(lectura);
+            }
+
+            // Actualizar historial
             var historial = _context.HistorialLecturas
                 .FirstOrDefault(h => h.UsuarioId == usuarioDb.Id && h.LibroId == id && h.FechaFin == null);
 
             if (historial == null)
             {
-                // Primera vez — crear registro
-                historial = new Libreria_Lecturas.Entidades.HistorialLecturas
+                _context.HistorialLecturas.Add(new Libreria_Lecturas.Entidades.HistorialLecturas
                 {
                     UsuarioId = usuarioDb.Id,
                     LibroId = id,
                     FechaInicio = DateTime.Now,
                     PaginasLeidas = PaginasLeidas
-                };
-                _context.HistorialLecturas.Add(historial);
+                });
             }
             else
             {
-                // Ya existe — actualizar páginas
                 historial.PaginasLeidas = PaginasLeidas;
-
-                // Si terminó el libro
                 if (PaginasLeidas >= Libro.PaginasTotales)
                     historial.FechaFin = DateTime.Now;
-
                 _context.HistorialLecturas.Update(historial);
             }
 
-            // Recalcular estadísticas
             await _context.SaveChangesAsync();
 
+            // Recalcular estadísticas
             var totalHistorial = _context.HistorialLecturas
                 .Where(h => h.UsuarioId == usuarioDb.Id).ToList();
 
@@ -125,6 +177,7 @@ namespace LecturasWeb.Pages.Libros
 
             return RedirectToPage("/Libros/Detalle", new { id });
         }
+
         public IActionResult OnGetDescargarPDF(int id)
         {
             Libro = _negocio.Consultar().FirstOrDefault(l => l.Id == id)!;
