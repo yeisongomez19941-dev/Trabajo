@@ -40,8 +40,8 @@ namespace LecturasWeb.Pages.CalendarioLecturas_Pages
 
             if (usuarioDb != null)
                 Calendario.UsuarioId = usuarioDb.Id;
-
             _negocio.Guardar(Calendario);
+            AuditoriaHelper.Registrar(_context, "Calendario", "Crear", User.Identity?.Name ?? "sistema", $"Calendario creado: \"{Calendario}\"");
             return RedirectToPage("/CalendarioLecturas");
         }
     }
