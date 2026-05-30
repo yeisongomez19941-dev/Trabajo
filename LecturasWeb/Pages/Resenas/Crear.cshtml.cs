@@ -33,8 +33,9 @@ namespace LecturasWeb.Pages.Resenas
             Libros = _librosNegocio.Consultar();
         }
 
-        public IActionResult OnPost()
-        {
+
+            public IActionResult OnPost()
+            {
             if (!ModelState.IsValid)
             {
                 Usuarios = _usuariosNegocio.Consultar();
@@ -42,8 +43,23 @@ namespace LecturasWeb.Pages.Resenas
                 return Page();
             }
 
+            // Verificar si el usuario ya dejó una reseña
+            var resenaExistente = _negocio.Consultar()
+                .FirstOrDefault(r => r.UsuarioId == Resenas.UsuarioId);
+
+            if (resenaExistente != null)
+            {
+                ModelState.AddModelError("", "Este usuario ya dejó una reseña.");
+                Usuarios = _usuariosNegocio.Consultar();
+                Libros = _librosNegocio.Consultar();
+                return Page();
+            }
+
             _negocio.Guardar(Resenas);
             return RedirectToPage("/Resenas/Index");
-        }
+            }
+
+       
+       
     }
 }

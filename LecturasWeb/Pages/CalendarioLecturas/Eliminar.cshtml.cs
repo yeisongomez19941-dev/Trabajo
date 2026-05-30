@@ -30,7 +30,7 @@ namespace LecturasWeb.Pages.CalendarioLecturas_Pages
         {
             _negocio.Borrar(Calendario);
             
-            AuditoriaHelper.Registrar(_context, "Calendario", "Eliminar", User.Identity?.Name ?? "sistema", $"Calendario eliminado: \"{Calendario}\"");
+            AuditoriaHelper.Registrar(_context, "Calendario", "Eliminar", User.Identity?.Name ?? "sistema", $"Calendario eliminado");
             return RedirectToPage("/CalendarioLecturas");
         }
     }
