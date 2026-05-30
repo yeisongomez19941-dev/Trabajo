@@ -29,5 +29,5 @@ namespace LecturasWeb.Pages.Estadisticas
                 _negocio.Borrar(Estadisticas);
                 return RedirectToPage("/Estadisticas");
             }
-        }
     }
+}

@@ -1,4 +1,35 @@
 ﻿@page
 @model LecturasWeb.Pages.Editoriales.EditarModel
 @{
+                <div class="mb-3">
+                <label class="form-label">Nombre Editorial</label>
+                <input asp-for="Editoriales.Nombre" type="text" class="form-control" />
+                <span asp-validation-for="Editoriales.Nombre" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Pais</label>
+                <input asp-for="Editoriales.Pais" type="text" class="form-control" />
+                <span asp-validation-for="Editoriales.Pais" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cuando se fundo?</label>
+                <input asp-for="Editoriales.AnoFundacion" type="date" class="form-control" />
+                <span asp-validation-for="Editoriales.AnoFundacion" class="text-danger small"></span>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="Logros.Activo" value="true" />
+                <label class="form-check-label">Activo</label>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-guardar">
+                    <i class="bi bi-check-lg me-1"></i> Guardar
+                </button>
+                <a asp-page="/Estadisticas" class="btn btn-outline-secondary btn-cancelar">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                </a>
+            </div>
+        
 }

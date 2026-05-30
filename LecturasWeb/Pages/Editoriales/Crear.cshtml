@@ -1,4 +1,35 @@
 ﻿@page
 @model LecturasWeb.Pages.Editoriales.CrearModel
 @{
+    <h2>Crear Editorial</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label>Nombre</label>
+ 
+            <div class="mb-3">
+                <label>Nombre Editorial</label>
+                <input asp-for="Editoriales.Nombre" type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Pais</label>
+                <input asp-for="Editoriales.Pais" type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Cuando se fundo?</label>
+                <input asp-for="Editoriales.AnoFundacion" type="date" class="form-control" />
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="Editoriales.Activa" value="true" />
+                <label class="form-check-label">Activa</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-page="/Editoriales" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
 }
+@*     public int Id { get; set; }
+        public string? Nombre { get; set; }
+        public string? Pais { get; set; }
+        public DateTime? AnoFundacion { get; set; }
+        public bool? Activa { get; set; } *@

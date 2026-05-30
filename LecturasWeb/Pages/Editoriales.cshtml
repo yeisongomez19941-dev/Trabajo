@@ -1,0 +1,220 @@
+﻿@page
+@model LecturasWeb.Pages.EditorialesModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editoriales - LecturasWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar {
+            width: 60px; background: #1a1a2e;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 16px 0; gap: 8px; height: 100vh;
+            position: fixed; left: 0; top: 0;
+        }
+        .sidebar-logo {
+            width: 36px; height: 36px; background: #e8c547;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-weight: 800; color: #1a1a2e;
+            font-size: 16px; margin-bottom: 16px;
+        }
+        .sidebar-item {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 18px; text-decoration: none; transition: all 0.2s;
+            position: relative;
+        }
+        .sidebar-item:hover, .sidebar-item.active { background: #e8c547; color: #1a1a2e; }
+        .sidebar-item .tooltip-label {
+            position: absolute; left: 56px; background: #1a1a2e;
+            color: white; font-size: 12px; padding: 4px 8px;
+            border-radius: 4px; white-space: nowrap;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .sidebar-item:hover .tooltip-label { opacity: 1; }
+        .main { margin-left: 60px; flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .topbar {
+            background: white; padding: 12px 24px;
+            display: flex; align-items: center; gap: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .topbar-brand { font-weight: 700; font-size: 18px; color: #1a1a2e; }
+        .topbar-actions { display: flex; gap: 12px; align-items: center; margin-left: auto; }
+        .topbar-icon { color: #555; font-size: 20px; text-decoration: none; }
+        .content { flex: 1; overflow-y: auto; padding: 24px; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .page-title { font-size: 24px; font-weight: 800; color: #1a1a2e; }
+        .table-card {
+            background: white; border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;
+        }
+        .table-card table { width: 100%; border-collapse: collapse; }
+        .table-card thead { background: #1a1a2e; color: white; }
+        .table-card thead th { padding: 14px 16px; font-size: 13px; font-weight: 600; }
+        .table-card tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.2s; }
+        .table-card tbody tr:hover { background: #fafafa; }
+        .table-card tbody td { padding: 12px 16px; font-size: 13px; color: #1a1a2e; }
+        .badge-on { background: #d4edda; color: #155724; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+        .badge-off { background: #f8d7da; color: #721c24; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">L</div>
+    <a asp-page="/Index" class="sidebar-item"><i class="bi bi-house-fill"></i><span class="tooltip-label">Inicio</span></a>
+    <a asp-page="/Libros" class="sidebar-item"><i class="bi bi-book"></i><span class="tooltip-label">Libros</span></a>
+    <a asp-page="/Favoritos" class="sidebar-item"><i class="bi bi-heart"></i><span class="tooltip-label">Favoritos</span></a>
+    <a asp-page="/HistorialLecturas" class="sidebar-item"><i class="bi bi-clock-history"></i><span class="tooltip-label">Historial</span></a>
+    <a asp-page="/Estadisticas" class="sidebar-item"><i class="bi bi-bar-chart"></i><span class="tooltip-label">Estadísticas</span></a>
+    <a asp-page="/Logros" class="sidebar-item"><i class="bi bi-star"></i><span class="tooltip-label">Logros</span></a>
+    <a asp-page="/CalendarioLecturas" class="sidebar-item"><i class="bi bi-calendar3"></i><span class="tooltip-label">Calendario</span></a>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <span class="topbar-brand">LecturasWeb</span>
+        <div class="topbar-actions">
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <a asp-page="/Account/Logout" class="topbar-icon" title="Cerrar sesión"><i class="bi bi-person-check-fill"></i></a>
+            }
+            else
+            {
+                <a asp-page="/Account/Login" class="topbar-icon" title="Iniciar sesión"><i class="bi bi-person"></i></a>
+            }
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="page-header">
+            <h4 class="page-title">Editoriales</h4>
+            @if (User.IsInRole("Admin"))
+            {
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditorial" onclick="prepararNueva()">
+                    <i class="bi bi-plus-lg"></i> Nueva Editorial
+                </button>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Mensaje))
+        {
+            <div class="alert alert-info alert-dismissible fade show mb-3">
+                @Model.Mensaje
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>País</th>
+                        <th>Año Fundación</th>
+                        <th>Activa</th>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <th>Acciones</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+          @foreach (var item in Model.ListaEditoriales)
+          {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Pais</td>
+                    <td>@(item.AnoFundacion?.Year.ToString() ?? "—")</td>
+                    <td><span class="@(item.Activa == true ? "badge-on" : "badge-off")">@(item.Activa == true ? "Sí" : "No")</span></td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <button class="btn btn-warning btn-sm"
+                                    onclick="prepararEdicion(@item.Id, '@item.Nombre', '@item.Pais', '@item.AnoFundacion?.ToString("yyyy-MM-dd")', @(item.Activa == true ? "true" : "false"))"
+                                    data-bs-toggle="modal" data-bs-target="#modalEditorial">
+                                Editar
+                            </button>
+                            <a asp-page="/Editoriales/Eliminar" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    }
+                </tr>
+          }
+
+<!-- Modal Guardar/Editar -->
+<div class="modal fade" id="modalEditorial" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Nueva Editorial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Editorial.Id" id="editorialId" />
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input asp-for="Editorial.Nombre" class="form-control" id="nombreInput" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">País</label>
+                        <input asp-for="Editorial.Pais" class="form-control" id="paisInput" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Año Fundación</label>
+                        <input asp-for="Editorial.AnoFundacion" type="date" class="form-control" id="anoInput" />
+                    </div>
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="activaInput" name="Editorial.Activa" value="true" />
+                    <label class="form-check-label">Activa</label>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" asp-page-handler="Guardar" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function prepararNueva() {
+        document.getElementById('modalTitulo').textContent = 'Nueva Editorial';
+        document.getElementById('editorialId').value = '0';
+        document.getElementById('nombreInput').value = '';
+        document.getElementById('paisInput').value = '';
+        document.getElementById('anoInput').value = '';
+        document.getElementById('activaInput').checked = true;
+        document.getElementById('btnGuardar').textContent = 'Guardar';
+    }
+
+    function prepararEdicion(id, nombre, pais, ano, activa) {
+        document.getElementById('modalTitulo').textContent = 'Editar Editorial';
+        document.getElementById('editorialId').value = id;
+        document.getElementById('nombreInput').value = nombre;
+        document.getElementById('paisInput').value = pais;
+        document.getElementById('anoInput').value = ano;
+        document.getElementById('activaInput').checked = activa === 'true';
+        document.getElementById('btnGuardar').textContent = 'Guardar cambios';
+    }
+
+    function confirmarBorrar(id) {
+        document.getElementById('borrarId').value = id;
+    }
+</script>
+</body>
+</html>
