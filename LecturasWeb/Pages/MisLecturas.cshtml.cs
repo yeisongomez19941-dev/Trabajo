@@ -20,6 +20,7 @@ namespace LecturasWeb.Pages
         public List<Libreria_Lecturas.Entidades.Lecturas> LecturasActivas { get; set; } = new();
         public List<Libreria_Lecturas.Entidades.Lecturas> LecturasTerminadas { get; set; } = new();
 
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (!User.Identity!.IsAuthenticated)

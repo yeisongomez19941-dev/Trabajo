@@ -1,8 +1,6 @@
 ﻿using Libreria_Lecturas.Entidades;
 using Libreria_Lecturas.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Libreria_Lecturas.Implementaciones
 {
@@ -16,10 +14,18 @@ namespace Libreria_Lecturas.Implementaciones
         }
 
         public List<Notas> Consultar()
-            => _context.Notas.ToList();
+            => _context.Notas.Include(n => n._LibroId).ToList();
+
+        public List<Notas> Consultar(int usuarioId)
+            => _context.Notas
+                .Include(n => n._LibroId)
+                .Where(n => n.UsuarioId == usuarioId)
+                .OrderByDescending(n => n.Fecha)
+                .ToList();
 
         public Notas Guardar(Notas entidad)
         {
+            entidad.Fecha = DateTime.Now;
             _context.Notas.Add(entidad);
             _context.SaveChanges();
             return entidad;
@@ -38,6 +44,5 @@ namespace Libreria_Lecturas.Implementaciones
             _context.SaveChanges();
             return true;
         }
-
     }
 }
