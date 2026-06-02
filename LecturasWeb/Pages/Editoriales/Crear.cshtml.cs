@@ -7,10 +7,12 @@ namespace LecturasWeb.Pages.Editoriales
     public class CrearModel : PageModel
     {
         private readonly IEditorialesNegocio _negocio;
+        private readonly IAuditoriasNegocio _auditorias;
 
-        public CrearModel(IEditorialesNegocio negocio)
+        public CrearModel(IEditorialesNegocio negocio, IAuditoriasNegocio auditorias)
         {
             _negocio = negocio;
+            _auditorias = auditorias;
         }
 
         [BindProperty]
@@ -21,6 +23,9 @@ namespace LecturasWeb.Pages.Editoriales
         {
             if (!ModelState.IsValid) return Page();
             _negocio.Guardar(Editoriales);
+            _auditorias.Registrar("Editoriales", "Crear",
+                User.Identity?.Name ?? "Sistema",
+                $"Editorial creada: {Editoriales.Nombre}");
             return RedirectToPage("/Editoriales");
         }
     }

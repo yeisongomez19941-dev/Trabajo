@@ -1,5 +1,6 @@
 using Libreria_Lecturas.Entidades;
 using Libreria_Lecturas.Implementaciones;
+using Libreria_Lecturas.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,15 +11,17 @@ public class RegistrarModel : PageModel
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly Conexion _context;
+    private readonly IAuditoriasNegocio _auditorias;
 
     public RegistrarModel(
         UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,
-        Conexion context)
+        Conexion context, IAuditoriasNegocio auditorias) 
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
+        _auditorias = auditorias;
     }
 
     [BindProperty] public string Nombre { get; set; }
@@ -48,6 +51,9 @@ public class RegistrarModel : PageModel
                 FechaRegistro = DateTime.UtcNow
             });
             await _context.SaveChangesAsync();
+            _auditorias.Registrar("Usuarios", "Registro",
+             Email,
+             $"Nuevo usuario registrado: {Nombre} ({Email})");
 
             await _signInManager.SignInAsync(identityUser, false);
             return RedirectToPage("/Index");

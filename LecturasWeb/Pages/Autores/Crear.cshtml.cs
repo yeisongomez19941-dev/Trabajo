@@ -9,12 +9,12 @@ namespace LecturasWeb.Pages.Autores_Pages
     public class CrearModel : PageModel
     {
         private readonly IAutoresNegocio _negocio;
-        private readonly Conexion _context; 
-
+        private readonly Conexion _context;
         public CrearModel(IAutoresNegocio negocio, Conexion context)
         {
             _negocio = negocio;
             _context = context;
+            
         }
 
         [BindProperty]

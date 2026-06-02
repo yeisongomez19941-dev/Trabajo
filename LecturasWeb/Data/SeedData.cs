@@ -47,7 +47,7 @@ namespace LecturasWeb.Data
             {
                 var usuario = new IdentityUser { UserName = usuarioEmail, Email = usuarioEmail };
                 await userManager.CreateAsync(usuario, "Usuario123!");
-                await userManager.AddToRoleAsync(usuario, "Usuario"); // ← también estaba mal esto
+                await userManager.AddToRoleAsync(usuario, "Usuario"); 
 
                 // Crear en tabla Usuarios
                 if (!context.Usuarios.Any(u => u.Email == usuarioEmail))

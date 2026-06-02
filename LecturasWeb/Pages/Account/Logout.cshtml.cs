@@ -7,6 +7,7 @@ namespace LecturasWeb.Pages.Account
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        
 
         public LogoutModel(SignInManager<IdentityUser> signInManager)
         {

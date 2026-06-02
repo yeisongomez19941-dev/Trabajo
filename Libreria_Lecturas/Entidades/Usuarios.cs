@@ -29,3 +29,13 @@ namespace Libreria_Lecturas.Entidades
         }
     }
 }
+
+
+
+
+
+
+
+//git status    # ver qué cambió
+//git diff      # ver exactamente qué líneas cambiaron
+//git restore . # revertir todos los cambios

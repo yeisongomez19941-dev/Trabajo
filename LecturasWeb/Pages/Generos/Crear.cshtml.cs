@@ -7,10 +7,12 @@ namespace LecturasWeb.Pages.Generos
     public class CrearModel : PageModel
     {
         private readonly IGenerosNegocio _negocio;
+        private readonly IAuditoriasNegocio _auditorias;
 
-        public CrearModel(IGenerosNegocio negocio)
+        public CrearModel(IGenerosNegocio negocio, IAuditoriasNegocio auditorias)
         {
             _negocio = negocio;
+            _auditorias = auditorias;
         }
 
         [BindProperty]
@@ -23,6 +25,9 @@ namespace LecturasWeb.Pages.Generos
         {
             if (!ModelState.IsValid) return Page();
             _negocio.Guardar(Generos);
+            _auditorias.Registrar("Generos", "Crear",
+                User.Identity?.Name ?? "Sistema",
+                $"Genero creado: {Generos.Nombre}");
             return RedirectToPage("/Generos");
         }
     }

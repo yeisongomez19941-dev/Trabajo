@@ -7,10 +7,12 @@ namespace LecturasWeb.Pages.Favoritos
     public class EliminarModel : PageModel
     {
         private readonly IFavoritosNegocio _negocio;
+        private readonly IAuditoriasNegocio _auditorias;
 
-        public EliminarModel(IFavoritosNegocio negocio)
+        public EliminarModel(IFavoritosNegocio negocio, IAuditoriasNegocio auditorias)
         {
             _negocio = negocio;
+            _auditorias = auditorias;
         }
 
         [BindProperty]
@@ -26,6 +28,9 @@ namespace LecturasWeb.Pages.Favoritos
         public IActionResult OnPost()
         {
             _negocio.Borrar(Favoritos);
+            _auditorias.Registrar("Favoritos", "Eliminar",
+                User.Identity?.Name ?? "Sistema",
+                $"Favorito eliminado: {Favoritos.Id}");
             return RedirectToPage("/Favoritos");
         }
     }
